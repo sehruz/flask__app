@@ -1,6 +1,4 @@
-from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
-)
+from flask import ( Blueprint, flash, g, redirect, render_template, request, url_for )
 from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
@@ -8,8 +6,8 @@ from flaskr.db import get_db
 
 bp = Blueprint('blog', __name__)
 
-
-def get_post(id, check_author=True):
+#this function is used in order to get post for update and delete
+def get_post(id):
     post = get_db().execute(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
@@ -20,7 +18,7 @@ def get_post(id, check_author=True):
     if post is None:
         abort(404, "Post id {0} doesn't exist.".format(id))
 
-    if check_author and post['author_id'] != g.user['id']:
+    if post['author_id'] != g.user['id']:
         abort(403)
 
     return post
@@ -43,8 +41,8 @@ def index():
 @login_required
 def create():
     if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
+        title = request.form.get('title')
+        body = request.form.get('body')
         error = None
 
         if not title:
