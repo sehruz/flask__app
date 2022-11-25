@@ -9,7 +9,7 @@ from flask.cli import with_appcontext
 """
 g is special opject that we can store data during request, it is uniqe for every request
 we create db connection and store it inside g
-sqlite3.Row is used because it returns not simple tuple, it returns dict that we can access any row with column name
+sqlite3.Row is used because it returns not simple tuple, it returns dict which we can access to any data with column name
 """
 def get_db():
     if 'db' not in g:
